@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // User profile: authenticated owner can read/write their profile and subcollections
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /scanHistory/{scanId} {
+        allow read, write, delete: if isOwner(userId);
+      }
+    }
+
+    // Root scan history collection
+    match /scanHistory/{scanId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // Leaderboard: public read, owner write
+    match /leaderboard/{userId} {
+      allow read: if true;
+      allow write, update: if isOwner(userId);
+    }
+
+    // Waste guide: public read, signed-in write
+    match /wasteGuide/{guideId} {
+      allow read: if true;
+      allow write, update, delete: if isSignedIn();
+    }
+  }
+}
+
+

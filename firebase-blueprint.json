@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile and eco activity statistics",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "points": { "type": "number" },
+        "level": { "type": "number" },
+        "totalScans": { "type": "number" },
+        "badges": {
+          "type": "array"
+        },
+        "createdAt": { "type": "string" },
+        "isAdmin": { "type": "boolean" }
+      },
+      "required": ["userId", "name", "email", "points", "totalScans", "createdAt"]
+    },
+    "ScanItem": {
+      "title": "ScanItem",
+      "description": "Individual waste scan result recorded by user",
+      "type": "object",
+      "properties": {
+        "scanId": { "type": "string" },
+        "userId": { "type": "string" },
+        "imageURL": { "type": "string" },
+        "objectName": { "type": "string" },
+        "confidence": { "type": "number" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "disposalMethod": { "type": "string" },
+        "recyclingSuggestion": { "type": "string" },
+        "environmentalImpact": { "type": "string" },
+        "carbonSaved": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "objectName", "category", "createdAt"]
+    },
+    "LeaderboardUser": {
+      "title": "LeaderboardUser",
+      "description": "Leaderboard ranking entry for eco champions",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "points": { "type": "number" },
+        "scans": { "type": "number" },
+        "photoURL": { "type": "string font" }
+      },
+      "required": ["userId", "name", "points"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile documents"
+    },
+    "/users/{userId}/scanHistory/{scanId}": {
+      "schema": { "$ref": "#/entities/ScanItem" },
+      "description": "Scan history subcollection for a user"
+    },
+    "/scanHistory/{scanId}": {
+      "schema": { "$ref": "#/entities/ScanItem" },
+      "description": "Legacy scan history collection"
+    },
+    "/leaderboard/{userId}": {
+      "schema": { "$ref": "#/entities/LeaderboardUser" },
+      "description": "Leaderboard records"
+    }
+  }
+}

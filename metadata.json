@@ -1,0 +1,6 @@
+{
+  "name": "EcoSort AI",
+  "description": "Bilingual smart waste segregation assistant featuring AI vision scans, carbon audits, interactive quizzes, and daily challenges.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
